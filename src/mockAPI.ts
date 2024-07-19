@@ -1,4 +1,18 @@
 import { createServer, Model, Factory } from "miragejs";
+import PerformanceMetric from "./interfaces/PerformanceMetric";
+
+const generatePerformanceMetricData = (
+  length: number = 10000
+): PerformanceMetric[] => {
+  const data: PerformanceMetric[] = [];
+  for (let index = 0; index < length; index++) {
+    data.push({
+      timestamp: new Date().getTime() + index * length,
+      value: Number((Math.random() * 5).toFixed(2)),
+    });
+  }
+  return data;
+};
 
 export function makeServer({ environment = "development" } = {}) {
   return createServer({
@@ -9,22 +23,21 @@ export function makeServer({ environment = "development" } = {}) {
 
     factories: {
       performanceMetric: Factory.extend({
-        timestamp: Date.now(),
-        value: 0.5
+        timestamp: Number,
+        value: Number,
       }),
     },
 
     seeds(server) {
-      server.create("performanceMetric", {
-        timestamp: Date.now(),
-        value: 0.7
-      });
+      const data = generatePerformanceMetricData();
+      data.forEach((performanceMetric: PerformanceMetric) =>
+        server.create("performanceMetric", performanceMetric)
+      );
     },
 
     routes() {
       this.get("/api/data", (schema) => {
-        console.log(schema?.db.performanceMetrics);
-        return schema.db.performanceMetrics;
+        return schema.all("performanceMetric");
       });
     },
   });

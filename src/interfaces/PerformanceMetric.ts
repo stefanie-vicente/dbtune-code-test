@@ -1,4 +1,4 @@
-export interface PerformanceMetric{
+export default interface PerformanceMetric{
     timestamp: number,
     value: number,
 }
