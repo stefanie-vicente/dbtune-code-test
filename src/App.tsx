@@ -1,10 +1,31 @@
 import { useEffect, useState } from "react";
+import PerformanceMetric from "./interfaces/PerformanceMetric";
 
 function App() {
+  const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
+
+  const filterDuplicatedMetricsValues = (data: PerformanceMetric[]) => {
+    const values = new Set<number>();
+    const filtered: PerformanceMetric[] = [];
+    for (let index = 0; index < data.length; index++) {
+      if (values.size >= 501) break;
+      if (!values.has(data[index].value)) {
+        values.add(data[index].value);
+        filtered.push(data[index]);
+      }
+    }
+    setMetrics(filtered);
+  };
+
+  const fetchData = () =>
+    fetch("/api/data")
+      .then((response) => response.json())
+      .then(({ performanceMetrics }) =>
+        filterDuplicatedMetricsValues(performanceMetrics)
+      );
 
   useEffect(() => {
-    fetch("/api/data")
-      .then((res) => console.log("res", res))
+    fetchData();
   }, []);
 
   return <>Returning...</>;
