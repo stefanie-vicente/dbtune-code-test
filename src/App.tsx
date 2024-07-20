@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PerformanceMetric from "./interfaces/PerformanceMetric";
+import PerformanceMetricChart from "./components/PerformanceMetricChart";
 
 function App() {
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
@@ -28,7 +29,11 @@ function App() {
     fetchData();
   }, []);
 
-  return <>Returning...</>;
+  return (
+    <>
+      <PerformanceMetricChart performanceMetricData={metrics} />
+    </>
+  );
 }
 
 export default App;
