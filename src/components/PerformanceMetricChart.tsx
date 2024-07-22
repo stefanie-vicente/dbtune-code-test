@@ -49,7 +49,8 @@ const PerformanceMetricChart: React.FC<PerformanceMetricChartProps> = ({
         label: "seconds",
         data: performanceMetricData.map((item) => item.value),
         fill: false,
-        borderColor: "blue",
+        borderColor: "dodgerblue",
+        pointRadius: 0,
       },
     ],
   };
@@ -70,8 +71,10 @@ const PerformanceMetricChart: React.FC<PerformanceMetricChartProps> = ({
           maxTicksLimit: labelsLength,
           font: {
             size: 16,
-            family: "Arial",
           },
+        },
+        grid: {
+          drawOnChartArea: false,
         },
       },
       y: {
@@ -79,8 +82,10 @@ const PerformanceMetricChart: React.FC<PerformanceMetricChartProps> = ({
           stepSize: 1,
           font: {
             size: 16,
-            family: "Arial",
           },
+        },
+        grid: {
+          drawOnChartArea: false,
         },
       },
     },
@@ -90,8 +95,7 @@ const PerformanceMetricChart: React.FC<PerformanceMetricChartProps> = ({
         text: "   Performance Metrics",
         align: "start",
         font: {
-          size: 20,
-          family: "Arial",
+          size: 25,
         },
       },
       legend: {
@@ -100,7 +104,6 @@ const PerformanceMetricChart: React.FC<PerformanceMetricChartProps> = ({
           boxWidth: 0,
           font: {
             size: 16,
-            family: "Arial",
           },
         },
       },
