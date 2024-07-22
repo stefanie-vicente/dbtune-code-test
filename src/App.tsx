@@ -4,6 +4,7 @@ import PerformanceMetric from "./interfaces/PerformanceMetric";
 import PerformanceMetricChart from "./components/PerformanceMetricChart";
 import Button from "./components/Button";
 import Card from "./components/Card";
+import server from "./mirageServer";
 
 function App() {
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
@@ -21,6 +22,13 @@ function App() {
     setMetrics(filtered);
   };
 
+  const onClickRefetchData = () => {
+    if (server && server.refreshData) {
+      server.refreshData();
+      fetchData();
+    }
+  };
+
   const fetchData = () =>
     fetch("/api/data")
       .then((response) => response.json())
@@ -34,7 +42,7 @@ function App() {
 
   return (
     <div className="App">
-      <Button onClick={fetchData}>Refetch data</Button>
+      <Button onClick={onClickRefetchData}>Refetch data</Button>
       <Card>
         <PerformanceMetricChart performanceMetricData={metrics} />
       </Card>

@@ -23,11 +23,22 @@ const generatePerformanceMetricData = (
   return data;
 };
 
+const seedData = (server: any) => {
+  const data = generatePerformanceMetricData();
+  data.forEach((performanceMetric) =>
+    server.create("performanceMetric", performanceMetric)
+  );
+}
+
 export function makeServer({ environment = "development" } = {}) {
-  return createServer({
+  const server = createServer({
     environment,
+
     models: {
-      performanceMetric: Model,
+      performanceMetric: Model.extend<PerformanceMetric>({
+        timestamp: 0,
+        value: 0
+      }),
     },
 
     factories: {
@@ -38,16 +49,22 @@ export function makeServer({ environment = "development" } = {}) {
     },
 
     seeds(server) {
-      const data = generatePerformanceMetricData();
-      data.forEach((performanceMetric: PerformanceMetric) =>
-        server.create("performanceMetric", performanceMetric)
-      );
+      seedData(server);
     },
 
     routes() {
-      this.get("/api/data", (schema) => {
+      this.namespace = "api";
+      this.get("/data", (schema) => {
         return schema.all("performanceMetric");
       });
     },
   });
+
+
+  server.refreshData = function() {
+    server.db.emptyData();
+    seedData(server);
+  };
+
+  return server;
 }
