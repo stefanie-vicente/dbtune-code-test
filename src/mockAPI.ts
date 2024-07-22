@@ -5,12 +5,21 @@ const generatePerformanceMetricData = (
   length: number = 10000
 ): PerformanceMetric[] => {
   const data: PerformanceMetric[] = [];
+
+  const startDate = new Date();
+  const endDate = new Date(startDate);
+  endDate.setFullYear(startDate.getFullYear() + 1);
+
+  const interval = (endDate.getTime() - startDate.getTime()) / length;
+
   for (let index = 0; index < length; index++) {
+    const timestamp = startDate.getTime() + index * interval;
     data.push({
-      timestamp: new Date().getTime() + index * length,
+      timestamp: timestamp,
       value: Number((Math.random() * 5).toFixed(2)),
     });
   }
+
   return data;
 };
 
